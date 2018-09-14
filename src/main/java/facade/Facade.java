@@ -2,6 +2,7 @@ package facade;
 
 import entity.Customer;
 import entity.EOrder;
+import entity.OrderLine;
 import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
@@ -99,7 +100,7 @@ public class Facade
                 orders.add(e);
                 c.setOrders(orders);
                 e.setCustomer(c);
-                
+
                 em.merge(cust);
             }
             em.getTransaction().commit();
@@ -108,6 +109,49 @@ public class Facade
         {
             em.close();
         }
+    }
+
+    public EOrder findOrder(int id)
+    {
+        EntityManager em = getEntityManager();
+        try
+        {
+            EOrder eo = em.find(EOrder.class, id);
+            return eo;
+
+        } finally
+        {
+            em.close();
+        }
+    }
+
+    public List<EOrder> getAllOrdersForOneCustomer(int id)
+    {
+        EntityManager em = getEntityManager();
+
+        Query q = em.createQuery("select c from EOrder c where c.customer.id = :id");
+        q.setParameter("id", id);
+        List<EOrder> orderList = q.getResultList();
+        return orderList;
+
+    }
+
+    public OrderLine createOrderLine(int quantity, EOrder eo)
+    {
+        EntityManager em = getEntityManager();
+        OrderLine ol = new OrderLine(quantity, eo);
+        try
+        {
+            em.getTransaction().begin();
+            
+            em.persist(ol);
+
+            em.getTransaction().commit();
+        } finally
+        {
+            em.close();
+        }
+        return ol;
     }
 
 }

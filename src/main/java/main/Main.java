@@ -33,13 +33,17 @@ public class Main
         System.out.println("Add an Order to a Customer: " + facade.OrderToCustomer(cust2));
         
         System.out.println("---");
-        System.out.println("Find an Order: ");
+        System.out.println("Find an Order: " + facade.findOrder(4));
         
         System.out.println("---");
-        System.out.println("Find all Orders, for a specific Customer: \n");
+        int id1 = 1;
+        System.out.println("Find all Orders, for a specific Customer: \n"
+                + "Customer: " + id1 + "\n"+ facade.getAllOrdersForOneCustomer(id1));
         
         System.out.println("---");
-        System.out.println("Create an OrderLine, and add it to an Order: ");
+        int quantity1 = 10;
+        EOrder eo3 = facade.findOrder(1);
+        System.out.println("Create an OrderLine, and add it to an Order: " + facade.createOrderLine(quantity1, eo3));
         
         System.out.println("---");
     }
