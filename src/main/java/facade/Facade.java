@@ -1,6 +1,8 @@
 package facade;
 
 import entity.Customer;
+import entity.EOrder;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -52,8 +54,8 @@ public class Facade
             em.close();
         }
     }
-    
-        public List<Customer> getAllCustomers()
+
+    public List<Customer> getAllCustomers()
     {
         EntityManager em = getEntityManager();
 
@@ -62,4 +64,50 @@ public class Facade
         return customerList;
 
     }
+
+    public EOrder createOrder(EOrder eo)
+    {
+        EntityManager em = getEntityManager();
+        try
+        {
+            em.getTransaction().begin();
+
+            em.persist(eo);
+
+            em.getTransaction().commit();
+        } finally
+        {
+            em.close();
+        }
+        return eo;
+    }
+
+    public Customer OrderToCustomer(Customer cust)
+    {
+
+        EntityManager em = getEntityManager();
+
+        try
+        {
+            em.getTransaction().begin();
+            Customer c = em.find(Customer.class, cust.getId());
+            EOrder e = new EOrder();
+
+            if (c != null)
+            {
+                List<EOrder> orders = c.getOrders();
+                orders.add(e);
+                c.setOrders(orders);
+                e.setCustomer(c);
+                
+                em.merge(cust);
+            }
+            em.getTransaction().commit();
+            return c;
+        } finally
+        {
+            em.close();
+        }
+    }
+
 }

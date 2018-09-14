@@ -2,10 +2,14 @@
 package entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 
 
 @Entity
@@ -18,7 +22,9 @@ public class Customer implements Serializable
     private Integer id;
     private String name;
     private String email;
-
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    private List<EOrder> orders = new ArrayList();
+    
     public Customer()
     {
     }
@@ -27,6 +33,16 @@ public class Customer implements Serializable
     {
         this.name = name;
         this.email = email;
+    }
+
+    public List<EOrder> getOrders()
+    {
+        return orders;
+    }
+
+    public void setOrders(List<EOrder> orders)
+    {
+        this.orders = orders;
     }
     
     public String getName()
