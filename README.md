@@ -1,4 +1,4 @@
-# ExamPrep-JPA
+# Object Relational Mapping with JPA
 
         Explain the rationale behind the topic Object Relational Mapping and the Pros and Cons in using ORM:
         
